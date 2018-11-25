@@ -42,10 +42,13 @@ def receive_data(connection):
     unpacked_data=unpacker.unpack(data)
     return unpacked_data
 
+soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+my_session_id=0
+
 def main():
-    global get_bin
-    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    host = "127.0.0.1"
+    s= input("Server ip:")
+    global get_bin, my_session_id
+    host = s
     port = 8888
 
     try:
@@ -99,7 +102,7 @@ def main():
                  send_data(soc,my_session_id, "000100", inp_bin)
         elif operation=="010000":
             input_good=False
-            print("[" + my_session_id + "]Bad luck! Let's try another one.")
+            print("[" + my_session_id + "] Bad luck! Let's try another one.")
             while not input_good:
                 inp = int(input("[" + my_session_id + "] Guess a number ->"))
                 if inp<0 or inp>7:
@@ -113,6 +116,9 @@ def main():
             print("["+my_session_id+"] Disconnecting from the server")
             send_data(soc, my_session_id,"100000","000")
             number_correct=True
+        elif operation=="111111" and id=="111" and answer=="111":
+            print("SERVER CLOSED")
+            number_correct=True
     soc.close()
 
 
@@ -121,4 +127,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        send_data(soc, my_session_id, "100000", "000")
+        soc.close()
