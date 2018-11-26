@@ -174,3 +174,65 @@ def receive_data(connection):
 
 if __name__ == "__main__":
     main()
+
+
+
+#nowy client thread, odpala, nadaje id, podaje ten przedział a później odpowiada polem odpowiedzi
+#WARNING: kolejność danych: OPERACJE, ODPOWIEDZI, ID SESJI, WARTOŚĆ LICZBOWA (jeśli potrzebna)
+#for sure będzie while w while'u, bo jeden handluje całe połączenie a drugi będzie działał dopóki nie zgadnie
+
+def new_client_thread(connection, ip, port):
+    is_active=True
+    session_id=id_list.pop(0)
+    print("Session ID: "+session_id+" start.")
+    while is_active:
+        #odbierz dane, muszę przerobić odbieranie, żeby brał inta
+        if OP =="000000" and taken>=3:
+            print ("["+session_id+"] Someone is trying to get in, server is full")
+            send_data(OP,RESP,ID,INTEGER)
+        elif OP=="000000" and taken<3:
+            print("[" + session_id + "] Someone is trying to connect. Hello!")
+            send_data(OP,RESP,ID,INTEGER)
+        elif OP=="000001": #taken nie jest potrzebny, bo go kod wyżej nie przepuści
+            print("[" + session_id + "] Client is asking for ID. Sending...")
+            send_data(OP,RESP,ID,INTEGER)
+        elif OP=="000010":
+            #a=INTEGER
+            if second_number==False:
+                print("[" + session_id + "] Client [ID:" + ID + "] has sent me a number: "+ INTEGER+".") ##to albo to z formatem %s%d
+                #KONTENER_A=INTEGER
+            else:
+                print("[" + session_id + "] Client [ID:" + ID + "] has sent me a number: " + INTEGER + ".")  ##to albo to z formatem %s%d
+                #KONTENER_B=INTEGER
+                #KONTENER_C=A-B
+                #KONTENER B+=A
+                #SECRET_NUMBER=random.randint(KONTENER_C, KONTENER_B)
+                print('%s%d' % ("[" + session_id + "] My secret number is: ", SECRET_NUMBER))
+                send_data(OP,RESP,ID,INTEGER) #lewa wartość przedziału
+                send_data(OP,RESP,ID,INTEGER) #prawa wartość przedziału
+        elif OP=="000100": #tutaj klient będzie miał drugą pętlę
+            #odbierz daną
+            c=int(INTEGER,2) #wstępnie tak
+            if c<SECRET_NUMBER:
+                send_data(OP,RESP,ID,INTEGER) #resp=001
+                print("[" + session_id + "] Client [ID:" + id + "] sent a number too small")
+            elif c>SECRET_NUMBER:
+                send_data(OP,RESP,ID,INTEGER) #resp=100
+                print("[" + session_id + "] Client [ID:" + id + "] sent a number too big")
+            else: #c==secretnum
+                send_data(OP,RESP,ID,INTEGER) #resp=010
+                print("[" + session_id + "] Client [ID:" + id + "] guessed a number")
+    #todo-> do komunikatów wszystkich kropki dać
+            elif OP == "100000" and taken < 3:
+                print("[" + session_id + "] Client [ID:" + id + "] disconnected")
+                id_list.insert(0, session_id)
+                client_counter = taken - 1
+                connection.close()
+                is_active = False
+            elif operations == "100000" and taken >= 3:
+                id_list.insert(0, session_id)
+                client_counter = taken - 1
+                connection.close()
+                is_active = False
+
+
