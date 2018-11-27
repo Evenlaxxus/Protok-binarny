@@ -1,7 +1,5 @@
 # VERSION 1: NO COMMENTS AND DEBUG THRASH
-# TODO -> ten sprawdzacz co Rafał chce (obsolete teraz)
 # TODO -> keyboard interrupt closes program (może kiedyś)
-# TODO -> kolejność według rozpiski, w polu odpowiedzi są tylko odpowiedzi serwera, dodatkowe to są dane 32 bity do unsigned inta, serwer ma przesyłać przedział, info o tym, że przedział<0 i ustawienie przedziału na 0
 # Merlin Merlin Merlin Merlin Merlin Merlin Merlin.
 
 #############################################
@@ -23,6 +21,17 @@ import struct
 import random
 import re
 from threading import Thread
+
+##
+# 000000 -> hello
+# 000001 -> ID operations
+# 000010 -> preparing for a game
+# 000100 -> Game
+# 001000 -> range error
+# 010000 -> overflow error
+# 100000 -> client disconnected
+# 111111 -> not enough seats
+##
 
 taken = 0
 
@@ -55,11 +64,11 @@ def send_data(sock, OP, RESP, ID, INTEGER):
     packed_data = data_structure.pack(*values)
     sock.sendall(packed_data)  # tu jest wszystko ogarnięte
 
-def client_thread(connection, ip, port):
-    global id_list, taken
+def client_thread(connection):
     SECRET_NUMBER = 0
     a = 0
     b = 0
+    global taken,id_list
     is_active = True
     second_number = False
     session_id = id_list.pop(0)
@@ -103,10 +112,10 @@ def client_thread(connection, ip, port):
                     if L2==65535:
                         L1=L1-2
                     print("Sending info about changes.")
-                    send_data(connection, "010001", "000", session_id,0) #jakiś kod potrzebuje nowy
+                    send_data(connection, "001000", "000", session_id,0) #jakiś kod potrzebuje nowy
 
                 SECRET_NUMBER = random.randint(L1+1, L2-1) #zeby byl otwarty przedzial
-                print('%s%d' % ("[" + session_id + "] My secret number is: ", SECRET_NUMBER))
+                print('%s%d%s' % ("[" + session_id + "] My secret number is: ", SECRET_NUMBER,"."))
                 send_data(connection, "000010", "100", ID, L1)  # lewa wartość przedziału
                 send_data(connection, "000010", "001", ID, L2)  # prawa wartość przedziału
 
@@ -121,7 +130,6 @@ def client_thread(connection, ip, port):
             else:  # c==secretnum
                 send_data(connection, "000100", "010", ID, 0)  # resp=010
                 print("[" + session_id + "] Client [ID:" + ID + "] guessed a number.")
-        # todo-> do komunikatów wszystkich kropki dać
         elif OP == '100000' and taken < 3:
             print("[" + session_id + "] Client [ID:" + ID + "] disconnected.")
             id_list.insert(0, session_id)
@@ -151,7 +159,7 @@ def start_server():
     soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     soc.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,
                    1)  # SO_REUSEADDR flag tells the kernel to reuse a local socket in TIME_WAIT state, without waiting for its natural timeout to expire
-    print("Socket created")
+    print("Socket created.")
 
     try:
         soc.bind((host, port))
@@ -160,16 +168,15 @@ def start_server():
         sys.exit()
 
     soc.listen(5)  # queue up to 5 requests
-    print("Socket now listening")
+    print("Socket now listening.")
     print("Server ready.")
 
     # infinite loop- do not reset for every requests
     while True:
         connection, address = soc.accept()
-        ip, port = str(address[0]), str(address[1])
         taken = taken + 1
         try:
-            Thread(target=client_thread, args=(connection, ip, port)).start()
+            Thread(target=client_thread(connection)).start()
         except:
             print("Thread did not start.")
             traceback.print_exc()
@@ -187,10 +194,8 @@ if __name__ == "__main__":
 # WARNING: kolejność danych: OPERACJE, ODPOWIEDZI, ID SESJI, WARTOŚĆ LICZBOWA (jeśli potrzebna)
 # for sure będzie while w while'u, bo jeden handluje całe połączenie a drugi będzie działał dopóki nie zgadnie
 # ----------------------------------------------------------------------------
-# todo-> usuń to ip i port, useless shit
 # todo-> dwa różne wysyłania, to z intem i to bez, wtedy wszędzie poza przekazywaniem numerów byłby jeden, a dalej drugi,
 # przerwanie klienta wtedy z przyjęciem inta i info (klient przerwał połączenie) a drugie bez inta (klient się grzecznie rozłączył)
 # todo-> w kliencie trzeba obsługiwać znak i rozmiar
-# todo->change client counter to "taken"
 
 

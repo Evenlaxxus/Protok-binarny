@@ -1,14 +1,22 @@
-# VERION 1: NO COMMENTS AND USELESS DEBUG
-
-# TODO -> ten sprawdzacz co Rafał chce (V.1.1)
-# TODO -> keyboard interrupt closes program (V 1.05)
-
+#Klient projektu nr 13 lab 7. Ewiak, Kulczak, 28.11.2018
 import socket
 import sys
 import struct
 import re
 
+##
+# 000000 -> hello
+# 000001 -> ID operations
+# 000010 -> preparing for a game
+# 000100 -> Game
+# 001000 -> range error
+# 010000 -> overflow error
+# 100000 -> client disconnected
+# 111111 -> not enough seats
+##
+
 data_structure = struct.Struct('BBH')
+
 
 
 def receive_data(sock):
@@ -49,7 +57,7 @@ def main():
     try:
         soc.connect((host, port))
     except:
-        print("Connection error")
+        print("Connection error.")
         sys.exit()
 
     send_data(soc, "000000", "000", "000", 0)
@@ -77,13 +85,13 @@ def main():
                 a = input('Enter a NUMBER in range: ')
             send_data(soc, "000010", "000", my_session_id, int(a))
         elif OP == "010000":
-            print("[ERR] Sent numbers caused overflow in range distribution. Values changed")
+            print("[SERV ERR] Sent numbers caused overflow in range distribution. Values changed.")
             # if INT > 1:
             #     print("Right value set to 65535.")
             # else:
             #     print("Left value set to 0.")
-        elif OP=="010001":
-            print("[ERR] Sent numbers cannot be used to choose anything.")
+        elif OP=="001000":
+            print("[SERV ERR] Sent numbers cannot be used to choose anything.")
             print("Left or right range changed so we could play.")
         elif OP == "000010" and RESP == "100":
             print("Server sent left range value.")
@@ -112,11 +120,11 @@ def main():
             send_data(soc, "000100", "000", my_session_id,int(a))
         elif OP == "000100" and RESP == "010":
             print("[" + my_session_id + "] Good job! That's the number you were looking for!")
-            print("[" + my_session_id + "] Disconnecting from the server")
+            print("[" + my_session_id + "] Disconnecting from the server.")
             send_data(soc, "100000", "000", my_session_id,int(a))
             number_correct = True
         elif OP == "111111":
-            print("SERVER CLOSED")
+            print("SERVER CLOSED.")
             number_correct = True
     soc.close()
 
