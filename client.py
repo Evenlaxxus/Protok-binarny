@@ -1,4 +1,4 @@
-#VERION 1: NO COMMENTS AND USELESS DEBUG
+# VERION 1: NO COMMENTS AND USELESS DEBUG
 
 # TODO -> ten sprawdzacz co Rafał chce (V.1.1)
 # TODO -> keyboard interrupt closes program (V 1.05)
@@ -9,6 +9,8 @@ import struct
 import re
 
 data_structure = struct.Struct('BBH')
+
+
 def receive_data(sock):
     data = sock.recv(data_structure.size)
     s_unpacked = str(data_structure.unpack(data))
@@ -32,88 +34,91 @@ def send_data(sock, OP, RESP, ID, INTEGER):
     packed_data = data_structure.pack(*values)
     sock.sendall(packed_data)  # tu jest wszystko ogarnięte
 
+
 soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-my_session_id=0
+my_session_id = 0
+
 
 def main():
-    s= input("Server ip:")
+    # s= input("Server ip:")
     global get_bin, my_session_id
-    host = s
+    host = "127.0.0.1"
     port = 8888
-
+    range_left = 0
+    range_right = 0
     try:
         soc.connect((host, port))
     except:
         print("Connection error")
         sys.exit()
 
-    send_data(soc, "000", "000000", "000")
-    number_correct=False
+    send_data(soc, "000000", "000", "000", 0)
+    number_correct = False
+    my_session_id = "000"
     while not number_correct:
-        #
-        reg_tuple=packet_parser(receive_data(soc))
-        byte1=reg_tuple[0]
-        byte2=reg_tuple[1]
-        id,answer,operation=deencapsulaton(int(byte1),int(byte2))
-        if operation=="111111":
+        OP, RESP, ID, INT = receive_data(soc)
+        if OP == "111111":
             print("Server is full, better check later.")
-            send_data(soc, "000","100000", "000")
+            send_data(soc, "100000", "000", my_session_id, 0)
             break
-        elif operation=="000000":
+        elif OP == "000000":
             print("Server agreed for connection. Requesting id.")
-            send_data(soc,"000","000001","000")
-        elif operation=="000001":
-            print("Server sent me a session ID: "+answer)
-            my_session_id=answer
-            inp = int(input("["+my_session_id+"] I'm going to send a number to server, input number 0-7 ->"))
-            if inp>7:
-                inp=7
-            elif inp<0:
-                inp=0
-            get_bin = lambda x, n: format(x, 'b').zfill(n)
-            inp_bin=get_bin(inp,3)
-            send_data(soc,my_session_id,"000010",inp_bin)
-            inp = int(input("["+my_session_id+"] I'm going to send another number to server, input number 0-7 ->"))
-            if inp > 7:
-                inp = 7
-            elif inp < 0:
-                inp = 0
-            inp_bin=get_bin(inp,3)
-            send_data(soc, my_session_id, "000010", inp_bin)
+            send_data(soc, "000001", "000", my_session_id, 0)
+        elif OP == "000001":
+            print("Server sent me a session ID: " + ID)
+            my_session_id = ID
+            a = input("[" + my_session_id + "] I'm going to send a number to server, input number 0-65535 ->")
+            while a.isdigit() == False or (a.isdigit() == True and int(a) > 65535):
+                a = input('Enter a NUMBER in range: ')
+            send_data(soc, "000010", "000", my_session_id, int(a))
 
-            input_good=False
-            while not input_good:
-             inp= int(input("["+my_session_id+"] Try to guess a number ->"))
-             if inp<0 or inp>7:
-                 print("That's definitely not that, try to use a number in range")
-             else:
-                 input_good=True
-                 inp_bin=get_bin(inp,3)
-                 send_data(soc,my_session_id, "000100", inp_bin)
-        elif operation=="010000":
-            input_good=False
-            print("[" + my_session_id + "] Bad luck! Let's try another one.")
-            while not input_good:
-                inp = int(input("[" + my_session_id + "] Guess a number ->"))
-                if inp<0 or inp>7:
-                    print("That's definitely not that, try to use a number in range")
-                else:
-                    input_good=True
-                    inp_bin=get_bin(inp,3)
-                    send_data(soc, my_session_id, "000100", inp_bin)
-        elif operation=="001000":
-            print("["+my_session_id+"] Good job! That's the number you were looking for!")
-            print("["+my_session_id+"] Disconnecting from the server")
-            send_data(soc, my_session_id,"100000","000")
-            number_correct=True
-        elif operation=="111111" and id=="111" and answer=="111":
+            a =input("[" + my_session_id + "] I'm going to send another number to server, input number 0-65535 ->")
+            while a.isdigit() == False or (a.isdigit() == True and int(a) > 65535):
+                a = input('Enter a NUMBER in range: ')
+            send_data(soc, "000010", "000", my_session_id, int(a))
+        elif OP == "010000":
+            print("[ERR] Sent numbers caused overflow in range distribution. Values changed")
+            # if INT > 1:
+            #     print("Right value set to 65535.")
+            # else:
+            #     print("Left value set to 0.")
+        elif OP=="010001":
+            print("[ERR] Sent numbers cannot be used to choose anything.")
+            print("Left or right range changed so we could play.")
+        elif OP == "000010" and RESP == "100":
+            print("Server sent left range value.")
+            range_left = INT
+        elif OP == "000010" and RESP == "001":
+            print("Server sent right range value.")
+            range_right = INT
+            print("Server is ready to go, enter your first number")
+            print("Secret number range: (" + str(range_left) +","+ str(range_right) + ")")
+            a=input("[" + my_session_id + "] Try to guess a number ->")
+            while a.isdigit() == False or (a.isdigit() == True and int(a) >=range_right) or (a.isdigit()==True and int(a)<=range_left):
+                a = input("Enter a NUMBER in range: (" + str(range_left) +","+ str(range_right) + ")->")
+            send_data(soc, "000100", "000", my_session_id,int(a))
+        elif OP == "000100" and RESP == "100" or (OP == "000100" and RESP == "001"):
+            if RESP == "100":
+                print("[" + my_session_id + "] Secret number is smaller than the one you entered.")
+                range_right = int(a)
+                print("[" + my_session_id+"]: (" + str(range_left) +","+ str(range_right) + ")->")
+            else:  # tego nie jestem pewien
+                print("[" + my_session_id + "] Secret number is bigger than the one you entered.")
+                range_left = int(a)
+                print("[" + my_session_id+"]: (" + str(range_left) + "," + str(range_right) + ")->")
+            a=input("[" + my_session_id + "] Try to guess a number ->")
+            while a.isdigit() == False or (a.isdigit() == True and int(a) >=range_right) or (a.isdigit() == True and int(a)<=range_left):
+                a = input("Enter a NUMBER in range: (" + str(range_left) +","+ str(range_right) + ")->")
+            send_data(soc, "000100", "000", my_session_id,int(a))
+        elif OP == "000100" and RESP == "010":
+            print("[" + my_session_id + "] Good job! That's the number you were looking for!")
+            print("[" + my_session_id + "] Disconnecting from the server")
+            send_data(soc, "100000", "000", my_session_id,int(a))
+            number_correct = True
+        elif OP == "111111":
             print("SERVER CLOSED")
-            number_correct=True
+            number_correct = True
     soc.close()
-
-
-
-
 
 
 if __name__ == "__main__":
