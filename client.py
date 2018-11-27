@@ -8,39 +8,29 @@ import sys
 import struct
 import re
 
-
-def encapsulation(id, operations, answer):
-    x = "0000" + id + answer + operations
-    byte1 = int(x[:8], 2)
-    byte2 = int(x[8:], 2)
-    return byte1, byte2
-
-def packet_parser(unpacked):
-    s_unpacked=str(unpacked)
-    regex_tuple=re.findall(r'\d{1,3}',s_unpacked)
-    return regex_tuple
-
-def deencapsulaton(byte1, byte2):
+data_structure = struct.Struct('BBH')
+def receive_data(sock):
+    data = sock.recv(data_structure.size)
+    s_unpacked = str(data_structure.unpack(data))
+    reg_tuple = re.findall(r'\d{1,5}', s_unpacked)
     get_bin = lambda x, n: format(x, 'b').zfill(n)
-    binary_byte1 = get_bin(byte1, 8)
-    binary_byte2 = get_bin(byte2, 8)
+    binary_byte1 = get_bin(int(reg_tuple[0]), 8)
+    binary_byte2 = get_bin(int(reg_tuple[1]), 8)
     byte_stream = binary_byte1 + binary_byte2
-    id = byte_stream[4:7]
-    answer = byte_stream[7:10]
-    operations = byte_stream[10:]
-    return id, answer, operations
+    OP = byte_stream[:6]
+    RESP = byte_stream[6:9]
+    ID = byte_stream[9:12]  # i od 12-16 jest 0000
+    INTEGER = int(reg_tuple[2])  # a tutaj normalnie jest int
+    return OP, RESP, ID, INTEGER  # i już, zamiast trzech mam jedną
 
-def send_data(connection, id, operations, answer):
-    packer=struct.Struct('BB')
-    values=(encapsulation(id,operations,answer))
-    packed_data=packer.pack(*values)
-    connection.sendall(packed_data)
 
-def receive_data(connection):
-    unpacker=struct.Struct('BB')
-    data=connection.recv(unpacker.size)
-    unpacked_data=unpacker.unpack(data)
-    return unpacked_data
+def send_data(sock, OP, RESP, ID, INTEGER):
+    x = OP + RESP + ID + "0000"  # dopełnienie do 2 bajtów
+    byte1 = int(x[:8], 2)  # bo to trzeba przerobić na liczby
+    byte2 = int(x[8:], 2)  # i to też
+    values = (byte1, byte2, INTEGER)  # przesyłana zawartość
+    packed_data = data_structure.pack(*values)
+    sock.sendall(packed_data)  # tu jest wszystko ogarnięte
 
 soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 my_session_id=0
@@ -60,7 +50,7 @@ def main():
     send_data(soc, "000", "000000", "000")
     number_correct=False
     while not number_correct:
-
+        #
         reg_tuple=packet_parser(receive_data(soc))
         byte1=reg_tuple[0]
         byte2=reg_tuple[1]
