@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="30cfb6c3-df06-4b2d-aec3-b9ae771da347" name="Default Changelist" comment="Działa&#10;todo-&gt; automatyczne zgadywanie metodą dziel i rządź">
+    <list default="true" id="30cfb6c3-df06-4b2d-aec3-b9ae771da347" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server_multithread.py" beforeDir="false" afterPath="$PROJECT_DIR$/server_multithread.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,7 +12,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/Protok_binarny$server_multithread.coverage" NAME="server_multithread Coverage Results" MODIFIED="1543362584900" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Protok_binarny$server_multithread.coverage" NAME="server_multithread Coverage Results" MODIFIED="1543388708475" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Protok_binarny$client.coverage" NAME="client Coverage Results" MODIFIED="1543360571224" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
@@ -36,8 +36,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/server_multithread.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="531">
-                  <caret line="187" column="10" lean-forward="true" selection-start-line="187" selection-start-column="10" selection-end-line="187" selection-end-column="10" />
+                <state relative-caret-position="183">
+                  <caret line="42" selection-start-line="42" selection-end-line="42" />
                 </state>
               </provider>
             </entry>
@@ -49,8 +49,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/client.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="335">
-                  <caret line="111" column="95" selection-start-line="111" selection-start-column="95" selection-end-line="111" selection-end-column="95" />
+                <state relative-caret-position="704">
+                  <caret line="135" column="45" selection-start-line="135" selection-start-column="39" selection-end-line="135" selection-end-column="45" />
                   <folding>
                     <element signature="e#143#156#0" expanded="true" />
                   </folding>
@@ -73,10 +73,10 @@
       <find>000100</find>
       <find>001000</find>
       <find>010000</find>
-      <find>100000</find>
       <find>111111</find>
       <find>client_counter</find>
       <find>(\&quot;\)\&quot;)$</find>
+      <find>100000</find>
     </findStrings>
     <replaceStrings>
       <replace>a=</replace>
@@ -100,7 +100,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="569" />
     <option name="y" value="-8" />
     <option name="width" value="972" />
@@ -192,7 +192,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1543180500238</updated>
-      <workItem from="1543249023895" duration="20254000" />
+      <workItem from="1543249023895" duration="22520000" />
     </task>
     <task id="LOCAL-00001" summary="pseudo-code added">
       <created>1543234903527</created>
@@ -222,11 +222,18 @@
       <option name="project" value="LOCAL" />
       <updated>1543362356457</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Działa&#10;todo-&gt; automatyczne zgadywanie metodą dziel i rządź">
+      <created>1543364177665</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1543364177665</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20254000" />
+    <option name="totallyTimeSpent" value="22520000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -238,7 +245,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.12153518" />
@@ -252,7 +259,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32939914" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3290461" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" />
@@ -295,7 +302,8 @@
     <MESSAGE value="Wersja 1.1&#10;-&gt;dużo todo&#10;-&gt;dylemat, czy robić ten protokół o stałej ramce, czy o zmiennej, trzeba będzie zrobić odnogę z wersją a i b" />
     <MESSAGE value="Wersja 1.11&#10;Działa, obsługuje wszystkie błędy na które wpadłem" />
     <MESSAGE value="no i nie chce działać obsługa kilku, dafak" />
-    <option name="LAST_COMMIT_MESSAGE" value="no i nie chce działać obsługa kilku, dafak" />
+    <MESSAGE value="Działa&#10;todo-&gt; automatyczne zgadywanie metodą dziel i rządź" />
+    <option name="LAST_COMMIT_MESSAGE" value="Działa&#10;todo-&gt; automatyczne zgadywanie metodą dziel i rządź" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3/socket.pyi">
@@ -312,20 +320,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server_multithread.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="531">
-          <caret line="187" column="10" lean-forward="true" selection-start-line="187" selection-start-column="10" selection-end-line="187" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="111" column="95" selection-start-line="111" selection-start-column="95" selection-end-line="111" selection-end-column="95" />
+        <state relative-caret-position="704">
+          <caret line="135" column="45" selection-start-line="135" selection-start-column="39" selection-end-line="135" selection-end-column="45" />
           <folding>
             <element signature="e#143#156#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server_multithread.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="183">
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
         </state>
       </provider>
     </entry>

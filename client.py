@@ -133,5 +133,5 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        send_data(soc, my_session_id, "100000", "000")
+        send_data(soc, my_session_id, "100000", "000",0)
         soc.close()
