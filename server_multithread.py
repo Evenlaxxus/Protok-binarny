@@ -64,7 +64,7 @@ def send_data(sock, OP, RESP, ID, INTEGER):
     packed_data = data_structure.pack(*values)
     sock.sendall(packed_data)  # tu jest wszystko ogarnięte
 
-def client_thread(connection):
+def client_thread(connection,ip, port):
     SECRET_NUMBER = 0
     a = 0
     b = 0
@@ -159,7 +159,7 @@ def start_server():
     soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     soc.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,
                    1)  # SO_REUSEADDR flag tells the kernel to reuse a local socket in TIME_WAIT state, without waiting for its natural timeout to expire
-    print("Socket created.")
+    print("Socket created")
 
     try:
         soc.bind((host, port))
@@ -168,21 +168,21 @@ def start_server():
         sys.exit()
 
     soc.listen(5)  # queue up to 5 requests
-    print("Socket now listening.")
+    print("Socket now listening")
     print("Server ready.")
 
     # infinite loop- do not reset for every requests
     while True:
         connection, address = soc.accept()
+        ip, port = str(address[0]), str(address[1])
         taken = taken + 1
         try:
-            Thread(target=client_thread(connection)).start()
+            Thread(target=client_thread, args=(connection, ip, port)).start()
         except:
             print("Thread did not start.")
             traceback.print_exc()
 
     soc.close()
-
 
 if __name__ == "__main__":
     main()

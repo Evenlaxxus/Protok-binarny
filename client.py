@@ -109,11 +109,11 @@ def main():
             if RESP == "100":
                 print("[" + my_session_id + "] Secret number is smaller than the one you entered.")
                 range_right = int(a)
-                print("[" + my_session_id+"]: (" + str(range_left) +","+ str(range_right) + ")->")
+                print("[" + my_session_id+"]: (" + str(range_left) +","+ str(range_right) + ")")
             else:  # tego nie jestem pewien
                 print("[" + my_session_id + "] Secret number is bigger than the one you entered.")
                 range_left = int(a)
-                print("[" + my_session_id+"]: (" + str(range_left) + "," + str(range_right) + ")->")
+                print("[" + my_session_id+"]: (" + str(range_left) + "," + str(range_right) + ")")
             a=input("[" + my_session_id + "] Try to guess a number ->")
             while a.isdigit() == False or (a.isdigit() == True and int(a) >=range_right) or (a.isdigit() == True and int(a)<=range_left):
                 a = input("Enter a NUMBER in range: (" + str(range_left) +","+ str(range_right) + ")->")
