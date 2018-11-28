@@ -1,7 +1,4 @@
-# VERSION 1: NO COMMENTS AND DEBUG THRASH
-# TODO -> keyboard interrupt closes program (może kiedyś)
 # Merlin Merlin Merlin Merlin Merlin Merlin Merlin.
-
 #############################################
 #   ->Serwer inicjuje działanie, powiązuje socket i nasłuchuje nadchodzących połączeń (do 5 w kolejce)
 #   ->Gdy połączenie zostaje nawiązane uruchamia nowy wątek i obsługuje go w odpowiedni sposób
