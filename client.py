@@ -1,9 +1,9 @@
-#Klient projektu nr 13 lab 7. Ewiak, Kulczak, 28.11.2018
+# Klient projektu nr 13 lab 7. Ewiak, Kulczak, 28.11.2018
 import socket
 import sys
 import struct
 import re
-
+import math
 ##
 # 000000 -> hello
 # 000001 -> ID operations
@@ -16,7 +16,6 @@ import re
 ##
 
 data_structure = struct.Struct('BBH')
-
 
 
 def receive_data(sock):
@@ -49,7 +48,7 @@ my_session_id = 0
 
 def main():
     # s= input("Server ip:")
-    global get_bin, my_session_id
+    global get_bin, my_session_id, automate
     host = "127.0.0.1"
     port = 8888
     range_left = 0
@@ -80,7 +79,7 @@ def main():
                 a = input('Enter a NUMBER in range: ')
             send_data(soc, "000010", "000", my_session_id, int(a))
 
-            a =input("[" + my_session_id + "] I'm going to send another number to server, input number 0-65535 ->")
+            a = input("[" + my_session_id + "] I'm going to send another number to server, input number 0-65535 ->")
             while a.isdigit() == False or (a.isdigit() == True and int(a) > 65535):
                 a = input('Enter a NUMBER in range: ')
             send_data(soc, "000010", "000", my_session_id, int(a))
@@ -90,7 +89,7 @@ def main():
             #     print("Right value set to 65535.")
             # else:
             #     print("Left value set to 0.")
-        elif OP=="001000":
+        elif OP == "001000":
             print("[SERV ERR] Sent numbers cannot be used to choose anything.")
             print("Left or right range changed so we could play.")
         elif OP == "000010" and RESP == "100":
@@ -99,29 +98,53 @@ def main():
         elif OP == "000010" and RESP == "001":
             print("Server sent right range value.")
             range_right = INT
-            print("Server is ready to go, enter your first number")
-            print("Secret number range: (" + str(range_left) +","+ str(range_right) + ")")
-            a=input("[" + my_session_id + "] Try to guess a number ->")
-            while a.isdigit() == False or (a.isdigit() == True and int(a) >=range_right) or (a.isdigit()==True and int(a)<=range_left):
-                a = input("Enter a NUMBER in range: (" + str(range_left) +","+ str(range_right) + ")->")
-            send_data(soc, "000100", "000", my_session_id,int(a))
+
+            print("Server is ready to go.")
+            print("Secret number range: (" + str(range_left) + "," + str(range_right) + ")")
+            s = str(input("Automate communication? Y\\N"))
+            if s == "Y" or s == "y":
+                automate = True
+                sr = int((range_left + range_right) / 2)
+                print("Sending " + str(sr) + ".")
+                send_data(soc, "000100", "000", my_session_id, sr)
+            else:
+                a = input("[" + my_session_id + "] Try to guess a number ->")
+                while a.isdigit() == False or (a.isdigit() == True and int(a) >= range_right) or (
+                        a.isdigit() == True and int(a) <= range_left):
+                    a = input("Enter a NUMBER in range: (" + str(range_left) + "," + str(range_right) + ")->")
+                send_data(soc, "000100", "000", my_session_id, int(a))
         elif OP == "000100" and RESP == "100" or (OP == "000100" and RESP == "001"):
-            if RESP == "100":
-                print("[" + my_session_id + "] Secret number is smaller than the one you entered.")
-                range_right = int(a)
-                print("[" + my_session_id+"]: (" + str(range_left) +","+ str(range_right) + ")")
-            else:  # tego nie jestem pewien
-                print("[" + my_session_id + "] Secret number is bigger than the one you entered.")
-                range_left = int(a)
-                print("[" + my_session_id+"]: (" + str(range_left) + "," + str(range_right) + ")")
-            a=input("[" + my_session_id + "] Try to guess a number ->")
-            while a.isdigit() == False or (a.isdigit() == True and int(a) >=range_right) or (a.isdigit() == True and int(a)<=range_left):
-                a = input("Enter a NUMBER in range: (" + str(range_left) +","+ str(range_right) + ")->")
-            send_data(soc, "000100", "000", my_session_id,int(a))
+            if automate == True:
+                if RESP == "100":
+                    print("[" + my_session_id + "] Secret number is smaller.")
+                    range_right = sr - 1
+                    sr = math.floor((range_left + range_right) / 2)
+                    print("Sending " + str(sr) + ".")
+                    send_data(soc, "000100", "000", my_session_id, int(sr))
+                if RESP =="001":
+                    print("[" + my_session_id + "] Secret number is bigger.")
+                    range_left = sr+1
+                    sr = math.floor((range_left + range_right) / 2)
+                    print("Sending " + str(sr) + ".")
+                    send_data(soc, "000100", "000", my_session_id, int(sr))
+            if automate == False:
+                if RESP == "100":
+                    print("[" + my_session_id + "] Secret number is smaller than the one you entered.")
+                    range_right = int(a)
+                    print("[" + my_session_id + "]: (" + str(range_left) + "," + str(range_right) + ")")
+                else:  # tego nie jestem pewien
+                    print("[" + my_session_id + "] Secret number is bigger than the one you entered.")
+                    range_left = int(a)
+                    print("[" + my_session_id + "]: (" + str(range_left) + "," + str(range_right) + ")")
+                a = input("[" + my_session_id + "] Try to guess a number ->")
+                while a.isdigit() == False or (a.isdigit() == True and int(a) >= range_right) or (
+                        a.isdigit() == True and int(a) <= range_left):
+                    a = input("Enter a NUMBER in range: (" + str(range_left) + "," + str(range_right) + ")->")
+                send_data(soc, "000100", "000", my_session_id, int(a))
         elif OP == "000100" and RESP == "010":
             print("[" + my_session_id + "] Good job! That's the number you were looking for!")
             print("[" + my_session_id + "] Disconnecting from the server.")
-            send_data(soc, "100000", "000", my_session_id,int(a))
+            send_data(soc, "100000", "000", my_session_id, int(a))
             number_correct = True
         elif OP == "111111":
             print("SERVER CLOSED.")
@@ -133,5 +156,5 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        send_data(soc, my_session_id, "100000", "000",0)
+        send_data(soc, my_session_id, "100000", "000", 0)
         soc.close()

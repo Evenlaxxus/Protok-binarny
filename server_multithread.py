@@ -120,10 +120,10 @@ def client_thread(connection,ip, port):
             # odbierz daną
             if INT < SECRET_NUMBER:
                 send_data(connection, "000100", "001", ID, 0)  # resp=001
-                print("[" + session_id + "] Client [ID:" + ID + "] sent a number too small.")
+                #print("[" + session_id + "] Client [ID:" + ID + "] sent a number too small.")
             elif INT > SECRET_NUMBER:
                 send_data(connection, "000100", "100", ID, 0)  # resp=100
-                print("[" + session_id + "] Client [ID:" + ID + "] sent a number too big.")
+                #print("[" + session_id + "] Client [ID:" + ID + "] sent a number too big.")
             else:  # c==secretnum
                 send_data(connection, "000100", "010", ID, 0)  # resp=010
                 print("[" + session_id + "] Client [ID:" + ID + "] guessed a number.")
