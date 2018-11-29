@@ -48,7 +48,8 @@ my_session_id = 0
 
 def main():
     # s= input("Server ip:")
-    global get_bin, my_session_id, automate
+    global get_bin, my_session_id
+    automate= False
     host = "127.0.0.1"
     port = 8888
     range_left = 0
@@ -156,5 +157,5 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        send_data(soc, my_session_id, "100000", "000", 0)
+        send_data(soc, "100000","000", "000", 0)
         soc.close()
