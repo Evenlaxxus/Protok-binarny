@@ -72,26 +72,26 @@ Jako, że komunikacja oparta jest o wątki wymagane było wprowadzenie pewnych n
           |                 5               |
                   ...           ...
 ```
-   >Podane cyfry, które spowodują błędy uniemożliwiające grę są naprawiane i komunikowane użytkownikowi.
-   >Po wysłaniu obu przedziałów (L1,L2 z kontenera) rozpoczynamy segment kolejny
+- Podane cyfry, które spowodują błędy uniemożliwiające grę są naprawiane i komunikowane użytkownikowi.
+- Po wysłaniu obu przedziałów (L1,L2 z kontenera) rozpoczynamy segment kolejny
 
-THE GAME
->Klienci otrzymują przedział (L1,L2), w którym zawiera się liczba.
->Każdy strzał zawęża obszar poszukiwań informując o relacji wprowadzonej liczby z sekretną (większe, mniejsze)
->Gra kończy się w momencie, gdy jeden z użytkowników odgadnie tajną liczbę.
+##THE GAME
+- Klienci otrzymują przedział (L1,L2), w którym zawiera się liczba.
+- Każdy strzał zawęża obszar poszukiwań informując o relacji wprowadzonej liczby z sekretną (większe, mniejsze)
+- Gra kończy się w momencie, gdy jeden z użytkowników odgadnie tajną liczbę.
 
 
 
-Reguły połączenia:
->Serwer obsługuje tylko dwójkę graczy, każdy kolejny gracz zostanie poinformowany o "zamknietych drzwiach".
->Drzwi zamknięte są w dwóch przypadkach
-  *liczba graczy==2
-  *liczba graczy<2 ale rozgrywka nadal trwa
-  -koniec rozgrywki definiowany jest na dwa sposoby:
-    ::gracz odgadł tajną liczbę
-    ::obydwu graczy opuści rozgrywkę
-   w przypadku odejścia jednego z graczy rozgrywka nadal trwa
- >Po odgadnięciu liczby gracze informują serwer o zerwaniu połączenia i zamykają gniazdo.
+###Reguły połączenia:
+- Serwer obsługuje tylko dwójkę graczy, każdy kolejny gracz zostanie poinformowany o "zamknietych drzwiach".
+- Drzwi zamknięte są w dwóch przypadkach
+  - liczba graczy==2
+  - liczba graczy<2 ale rozgrywka nadal trwa
+  - koniec rozgrywki definiowany jest na dwa sposoby:
+    - gracz odgadł tajną liczbę
+    - obydwu graczy opuści rozgrywkę
+  - w przypadku odejścia jednego z graczy rozgrywka nadal trwa
+- Po odgadnięciu liczby gracze informują serwer o zerwaniu połączenia i zamykają gniazdo.
  
  Gracz może odejść w każdym momencie rozgrywki wysyłając przerwanie klawiaturowe CTRL+C.
  
