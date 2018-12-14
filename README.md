@@ -66,6 +66,7 @@ Jako, że komunikacja oparta jest o wątki wymagane było wprowadzenie pewnych n
           .                 4         <-SECRET NUMBER
           .                 5           event.set()
           |                 5               |
+                                               
                   ...           ...
    >Podane cyfry, które spowodują błędy uniemożliwiające grę są naprawiane i komunikowane użytkownikowi.
    >Po wysłaniu obu przedziałów (L1,L2 z kontenera) rozpoczynamy segment kolejny
