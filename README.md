@@ -97,7 +97,7 @@ Reguły połączenia:
  Dla ułatwienia czytelności:
  <- "odebranie"
  -> "wysłanie"
- 
+ ```bash
    OP   | RESPONSE| OP TRANSLATE|                                    Serwer                  |             Klient
  000000 |   ---   | HI          | -> odpowiedzi na zapytanie klienta, nawiązanie połączenia. | -> zapytania klienta o nawiązanie połączenia 
  000001 |   ---   | ID          | -> ID                                                      | -> prośby udzielenia ID
@@ -111,18 +111,22 @@ Reguły połączenia:
  010000 |   ---   | OVERFLOW_ER | -> informacji o przepełnieniu wartości przedziału          | <- informacji o błędzie
  100000 |   ---   | DISCONNECT  | <- informacji o rozłączeniu klienta                        | -> wiadomości pożegnalnej
  111111 |   ---   | DOOR_CLOSED | -> informacji o "zamkniętych drzwiach"                     | <- wiadomości o zamkniętych drzwiach
- 
+```
  
  Wysłanie informacji o błędzie (RANGE_ERROR\OVERFLOW_ERROR) zawsze wiąże się z wprowadzeniem zmian.
  
  Segment przesyłanych wygląda następująco:
  
  a) w przypadku, gdy niepotrzebne jest przesłanie cyfry:
+```bash
    |OPERACJA|ODPOWIEDŹ|ID|
    |  6b    |   3b    |3b|
+```    
  b) w przypadku, gdy przesłanie cyfry jest wymagane (instrukcje operacji NUMBERS_INIT oraz THE_GAME)
+```bash
    |OPERACJA|ODPOWIEDŹ|ID|CYFRA|
    |  6b    |   3b    |3b| 20b |
+ ```
  
  
  
