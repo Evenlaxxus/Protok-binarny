@@ -1,9 +1,9 @@
 # Protok-binarny
 Projekt z przedmiotu Technologie Sieciowe lab7, nr zadania: 13
-https://drive.google.com/file/d/17ty_VBR0Cl4ceHmgmkt3KdaaIw39pWA5/view?usp=sharing
+[Dokument lab 7](https://drive.google.com/file/d/17ty_VBR0Cl4ceHmgmkt3KdaaIw39pWA5/view?usp=sharing)
 Działanie programu wg zawartości ww. dokumentu
 
-Komunikacja klient-serwer
+## Komunikacja klient-serwer
 
 ```bash
 K1                S                 K2
@@ -35,22 +35,25 @@ CONNECTION_END  \ | /           CONNECTION_END  /CLOSING CONNECTION
 Każdy z nowych połączeń wiąże się z utworzeniem nowego wątku zamykanego po zakończonej sesji.
 
 Segment CONNECTION_INIT to seria komunikatów uruchamiających program.
->Klient nawiązuje połączenie używając komunikatu HI
->Serwer odpowiada na komunikat HI
-  * Odrzuca połączenie w przypadku, gdy l.połączonych.klientów>2
-  * Akceptuje połączenie (do gry potrzebnych jest 2 uczestników)
->Klient prosi serwer o nadanie mu unikatowego identyfikatora sesji.
->Serwer wysyła dany identyfikator sesji, oczekuje na dalsze instrukcje
+- Klient nawiązuje połączenie używając komunikatu HI
+- Serwer odpowiada na komunikat HI
+  - Odrzuca połączenie w przypadku, gdy l.połączonych.klientów>2
+  - Akceptuje połączenie (do gry potrzebnych jest 2 uczestników)
+- Klient prosi serwer o nadanie mu unikatowego identyfikatora sesji.
+- Serwer wysyła dany identyfikator sesji, oczekuje na dalsze instrukcje 
+
+
 
 
 Segment NUMBERS_INIT jest odpowiedzialny za przygotowanie zmiennych potrzebnych do gry.
 *W tym segmencie jeden klient może wysłać tylko jedną cyfrę z przedziału (0-1048575)*
 Jako, że komunikacja oparta jest o wątki wymagane było wprowadzenie pewnych norm:
-  >Wątek, który jako pierwszy otrzyma cyfrę od klienta umieszcza ją w zewnętrznym kontenerze i przechodzi w stan uśpienia z pomocą funkcji Event
-  >Wątek, który jako drugi otrzyma cyfrę w zewnętrznych kontenerach umieszcza:
-    *otrzymaną cyfrę
-    *obliczone przedziały liczby losowanej
-    *liczbę do odgadnięcia
+- Wątek, który jako pierwszy otrzyma cyfrę od klienta umieszcza ją w zewnętrznym kontenerze i przechodzi w stan uśpienia z pomocą funkcji Event
+  - Wątek, który jako drugi otrzyma cyfrę w zewnętrznych kontenerach umieszcza:
+    - otrzymaną cyfrę
+	- obliczone przedziały liczby losowanej
+	- liczbę do odgadnięcia
+
   następnie budzi wątek pierwszy do dalszego działania.
 ```bash
  Interpretacja graficzna problemu:
@@ -97,7 +100,7 @@ Reguły połączenia:
  Dla ułatwienia czytelności:
  <- "odebranie"
  -> "wysłanie"
- ```bash
+ 
    OP   | RESPONSE| OP TRANSLATE|                                    Serwer                  |             Klient
  000000 |   ---   | HI          | -> odpowiedzi na zapytanie klienta, nawiązanie połączenia. | -> zapytania klienta o nawiązanie połączenia 
  000001 |   ---   | ID          | -> ID                                                      | -> prośby udzielenia ID
@@ -111,22 +114,18 @@ Reguły połączenia:
  010000 |   ---   | OVERFLOW_ER | -> informacji o przepełnieniu wartości przedziału          | <- informacji o błędzie
  100000 |   ---   | DISCONNECT  | <- informacji o rozłączeniu klienta                        | -> wiadomości pożegnalnej
  111111 |   ---   | DOOR_CLOSED | -> informacji o "zamkniętych drzwiach"                     | <- wiadomości o zamkniętych drzwiach
-```
+ 
  
  Wysłanie informacji o błędzie (RANGE_ERROR\OVERFLOW_ERROR) zawsze wiąże się z wprowadzeniem zmian.
  
  Segment przesyłanych wygląda następująco:
  
  a) w przypadku, gdy niepotrzebne jest przesłanie cyfry:
-```bash
    |OPERACJA|ODPOWIEDŹ|ID|
    |  6b    |   3b    |3b|
-```    
  b) w przypadku, gdy przesłanie cyfry jest wymagane (instrukcje operacji NUMBERS_INIT oraz THE_GAME)
-```bash
    |OPERACJA|ODPOWIEDŹ|ID|CYFRA|
    |  6b    |   3b    |3b| 20b |
- ```
  
  
  
