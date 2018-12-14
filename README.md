@@ -1,6 +1,8 @@
 # Protok-binarny
 Projekt z przedmiotu Technologie Sieciowe lab7, nr zadania: 13
+
 [Dokument lab 7](https://drive.google.com/file/d/17ty_VBR0Cl4ceHmgmkt3KdaaIw39pWA5/view?usp=sharing)
+
 Działanie programu wg zawartości ww. dokumentu
 
 ## Komunikacja klient-serwer
@@ -75,14 +77,14 @@ Jako, że komunikacja oparta jest o wątki wymagane było wprowadzenie pewnych n
 - Podane cyfry, które spowodują błędy uniemożliwiające grę są naprawiane i komunikowane użytkownikowi.
 - Po wysłaniu obu przedziałów (L1,L2 z kontenera) rozpoczynamy segment kolejny
 
-##THE GAME
+## THE GAME
 - Klienci otrzymują przedział (L1,L2), w którym zawiera się liczba.
 - Każdy strzał zawęża obszar poszukiwań informując o relacji wprowadzonej liczby z sekretną (większe, mniejsze)
 - Gra kończy się w momencie, gdy jeden z użytkowników odgadnie tajną liczbę.
 
 
 
-###Reguły połączenia:
+### Reguły połączenia:
 - Serwer obsługuje tylko dwójkę graczy, każdy kolejny gracz zostanie poinformowany o "zamknietych drzwiach".
 - Drzwi zamknięte są w dwóch przypadkach
   - liczba graczy==2
@@ -97,10 +99,12 @@ Jako, że komunikacja oparta jest o wątki wymagane było wprowadzenie pewnych n
  
  Tablica komunikatów:
  
- Dla ułatwienia czytelności:
+ > Dla ułatwienia czytelności:
+ ```bash
  <- "odebranie"
  -> "wysłanie"
- 
+ ```	
+ ```bash
    OP   | RESPONSE| OP TRANSLATE|                                    Serwer                  |             Klient
  000000 |   ---   | HI          | -> odpowiedzi na zapytanie klienta, nawiązanie połączenia. | -> zapytania klienta o nawiązanie połączenia 
  000001 |   ---   | ID          | -> ID                                                      | -> prośby udzielenia ID
@@ -114,19 +118,22 @@ Jako, że komunikacja oparta jest o wątki wymagane było wprowadzenie pewnych n
  010000 |   ---   | OVERFLOW_ER | -> informacji o przepełnieniu wartości przedziału          | <- informacji o błędzie
  100000 |   ---   | DISCONNECT  | <- informacji o rozłączeniu klienta                        | -> wiadomości pożegnalnej
  111111 |   ---   | DOOR_CLOSED | -> informacji o "zamkniętych drzwiach"                     | <- wiadomości o zamkniętych drzwiach
- 
+ ```
  
  Wysłanie informacji o błędzie (RANGE_ERROR\OVERFLOW_ERROR) zawsze wiąże się z wprowadzeniem zmian.
  
  Segment przesyłanych wygląda następująco:
  
- a) w przypadku, gdy niepotrzebne jest przesłanie cyfry:
+- w przypadku, gdy niepotrzebne jest przesłanie cyfry:
+```bash
    |OPERACJA|ODPOWIEDŹ|ID|
    |  6b    |   3b    |3b|
- b) w przypadku, gdy przesłanie cyfry jest wymagane (instrukcje operacji NUMBERS_INIT oraz THE_GAME)
+```
+- w przypadku, gdy przesłanie cyfry jest wymagane (instrukcje operacji NUMBERS_INIT oraz THE_GAME)
+```bash
    |OPERACJA|ODPOWIEDŹ|ID|CYFRA|
    |  6b    |   3b    |3b| 20b |
- 
+``` 
  
  
 
