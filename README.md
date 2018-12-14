@@ -5,7 +5,7 @@ Działanie programu wg zawartości ww. dokumentu
 
 Komunikacja klient-serwer
 
-
+```bash
 K1                S                 K2
 |              T1 | T2              |           \
 |                 |                 |           |
@@ -30,7 +30,7 @@ GUESS->        |  | |         <-GUESS           \
 |       <-GUESSED | GUESSED->       |           /
 BYE->           | | |         <-BYE |           \
 CONNECTION_END  \ | /           CONNECTION_END  /CLOSING CONNECTION
-              
+```
 
 Każdy z nowych połączeń wiąże się z utworzeniem nowego wątku zamykanego po zakończonej sesji.
 
@@ -52,7 +52,8 @@ Jako, że komunikacja oparta jest o wątki wymagane było wprowadzenie pewnych n
     *obliczone przedziały liczby losowanej
     *liczbę do odgadnięcia
   następnie budzi wątek pierwszy do dalszego działania.
-  Interpretacja graficzna problemu:
+```bash
+ Interpretacja graficzna problemu:
           T1        Kontenery_zewnętrzne    T2
           |                 |               |
  Cyfra->  |                 |               |
@@ -66,8 +67,8 @@ Jako, że komunikacja oparta jest o wątki wymagane było wprowadzenie pewnych n
           .                 4         <-SECRET NUMBER
           .                 5           event.set()
           |                 5               |
-                                               
                   ...           ...
+```
    >Podane cyfry, które spowodują błędy uniemożliwiające grę są naprawiane i komunikowane użytkownikowi.
    >Po wysłaniu obu przedziałów (L1,L2 z kontenera) rozpoczynamy segment kolejny
 
