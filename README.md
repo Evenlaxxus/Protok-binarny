@@ -111,9 +111,9 @@ Jako, że komunikacja oparta jest o wątki wymagane było wprowadzenie pewnych n
  000010 |   ---   | NUMBERS_INIT| <- cyfry L                                                 | -> cyfry L
  000010 |   ---   | NUMBERS_INIT| -> prawej wartości przedziału                              | <- prawej wartości przedziału
  000010 |   ---   | NUMBERS_INIT| -> lewej wartości przedziału                               | <- lewej wartości przedziału
- 000100 |   ---   | THE_GAME    | ->Podana liczba jest za duża                               | <- danej informacji, zawężenie przedziału
- 000100 |   ---   | THE_GAME    | ->Podana liczba jest za mała                               | <- danej informacji, zawężenie przedziału
- 000100 |   ---   | THE_GAME    | -> informacji o trafieniu                                  | <- informacji o trafieniu
+ 000100 |   001   | THE_GAME    | ->Podana liczba jest za duża                               | <- danej informacji, zawężenie przedziału
+ 000100 |   100   | THE_GAME    | ->Podana liczba jest za mała                               | <- danej informacji, zawężenie przedziału
+ 000100 |   010   | THE_GAME    | -> informacji o trafieniu                                  | <- informacji o trafieniu
  001000 |   ---   | RANGE_ERROR | -> informacji o wprowadzeniu zmian do tworzonego przedziału| <- informacji o błędzie
  010000 |   ---   | OVERFLOW_ER | -> informacji o przepełnieniu wartości przedziału          | <- informacji o błędzie
  100000 |   ---   | DISCONNECT  | <- informacji o rozłączeniu klienta                        | -> wiadomości pożegnalnej
