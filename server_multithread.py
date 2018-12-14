@@ -2,14 +2,6 @@
 #############################################
 #   ->Serwer inicjuje działanie, powiązuje socket i nasłuchuje nadchodzących połączeń (do 5 w kolejce)
 #   ->Gdy połączenie zostaje nawiązane uruchamia nowy wątek i obsługuje go w odpowiedni sposób
-#   ->Wysyłanie paczki: encapsulation->send_data
-#   ->Odbieranie paczki: receive data->packet_parser->deencapsulation
-#############################################
-# * do enkapsulacji i dekapsulacji użyto funkcji klasy Struct() pakującej do ustalonego dla nas formatu, czy cos
-# *https://docs.python.org/3/library/struct.html
-#
-#
-#
 #############################################
 import socket
 import sys
@@ -132,7 +124,9 @@ def client_thread(connection, ip, port):
                     print("Sending info about changes.")
                     send_data(connection, "001000", "000", session_id, -1)
                 send_data(connection, "000010", "100", ID, range_numbers[0])  # lewa wartość przedziału
-                send_data(connection, "000010", "001", ID, range_numbers[1])  # prawa wartość przedziału
+                print("Left value sent")
+                send_data(connection, "000010", "001", ID, range_numbers[1]) # prawa wartość przedziału
+                print("Both values sent")
         elif "000100" == OP:  # tutaj klient będzie miał drugą pętlę
             # odbierz daną
             if number_guessed==False:

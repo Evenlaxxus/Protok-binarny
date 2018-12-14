@@ -49,7 +49,7 @@ my_session_id = 0
 def main():
     last_sent_int=0
     global get_bin, my_session_id
-    t = Timer(2, tim)
+    t = Timer(1, tim)
     automate= False
     host = "127.0.0.1"
     port = 8888
