@@ -18,11 +18,8 @@ from threading import Timer
 
 
 def send_data(sock, OP, RESP, ID, INTEGER):
-    if INTEGER==-1:
-        sock.sendall(BitArray('0b' + OP + RESP + ID).tobytes())
-    else:
-        get_bin = lambda x, n: format(x, 'b').zfill(n)
-        sock.sendall(BitArray('0b' + OP + RESP + ID + get_bin(INTEGER, 20)).tobytes())
+    get_bin = lambda x, n: format(x, 'b').zfill(n)
+    sock.sendall(BitArray('0b' + OP + RESP + ID + get_bin(INTEGER, 20)).tobytes())
 
 
 def receive_data(sock):
@@ -30,10 +27,7 @@ def receive_data(sock):
     OP = x[:6]
     RESP = x[6:9]
     ID = x[9:12]
-    if len(x) < 32:
-        INTEGER=-1
-    else:
-        INTEGER = int(x[12:], 2)
+    INTEGER = int(x[12:], 2)
     return OP, RESP, ID, INTEGER
 
 
