@@ -124,12 +124,6 @@ Jako, że komunikacja oparta jest o wątki wymagane było wprowadzenie pewnych n
  
  Segment przesyłanych wygląda następująco:
  
-- w przypadku, gdy niepotrzebne jest przesłanie cyfry:
-```bash
-   |OPERACJA|ODPOWIEDŹ|ID|
-   |  6b    |   3b    |3b|
-```
-- w przypadku, gdy przesłanie cyfry jest wymagane (instrukcje operacji NUMBERS_INIT oraz THE_GAME)
 ```bash
    |OPERACJA|ODPOWIEDŹ|ID|CYFRA|
    |  6b    |   3b    |3b| 20b |
